@@ -14,34 +14,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Arrays;
 
 @SpringBootApplication
-//@EnableBatchProcessing
-public class ImdbApplication implements CommandLineRunner {
-
-	private final JobLauncher jobLauncher;
-	private final ApplicationContext applicationContext;
-
-
-	public ImdbApplication(JobLauncher jobLauncher, ApplicationContext applicationContext) {
-		this.jobLauncher = jobLauncher;
-		this.applicationContext = applicationContext;
-	}
+public class ImdbApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ImdbApplication.class, args);
-	}
-
-	public void run(String... args) throws Exception {
-		JobParameters jobParameters = new JobParametersBuilder()
-				.addString("JobID", String.valueOf(System.currentTimeMillis()))
-				.toJobParameters();
-		Job job = applicationContext.getBean("importJob", Job.class);
-		var jobExecution = jobLauncher.run(job, jobParameters);
-
-		var batchStatus = jobExecution.getStatus();
-		while (batchStatus.isRunning()) {
-			System.out.println("Still running...");
-			Thread.sleep(5000L);
-		}
 	}
 
 }
