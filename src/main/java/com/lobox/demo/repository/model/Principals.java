@@ -1,4 +1,4 @@
-package repository.model;
+package com.lobox.demo.repository.model;
 
 import jakarta.persistence.*;
 

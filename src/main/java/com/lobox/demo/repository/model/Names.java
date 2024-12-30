@@ -1,9 +1,11 @@
-package repository.model;
+package com.lobox.demo.repository.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Set;
 
+@Data
 @Entity
 @Table
 public class Names {
