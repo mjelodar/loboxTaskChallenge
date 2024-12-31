@@ -21,7 +21,9 @@ public class BasicMovie {
 //    private Crew crew;
 
     private String titleType;
+    @Column(length = 500)
     private String primaryTitle;
+    @Column(length = 500)
     private String originalTitle;
     private Boolean isAdult;
     private String startYear;

@@ -25,20 +25,22 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     private final BasicMovieJpaRepository basicMovieJpaRepository;
 
 
-    public BasicStepConfiguration(BasicMovieJpaRepository basicMovieJpaRepository, JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public BasicStepConfiguration(BasicMovieJpaRepository basicMovieJpaRepository,
+                                  JobRepository jobRepository,
+                                  PlatformTransactionManager transactionManager) {
         super(jobRepository, transactionManager);
         this.basicMovieJpaRepository = basicMovieJpaRepository;
     }
 
 
     @Override
-    @Bean(name = "crewReader")
+    @Bean(name = "basicReader")
     protected FlatFileItemReader<BasicMovie> reader() {
         return new FlatFileItemReaderBuilder<BasicMovie>()
                 .name("basicItemReader")
                 .resource(new ClassPathResource("test.tsv"))
                 .linesToSkip(1)
-                .delimited().delimiter("\t")
+                .delimited().delimiter("\t").strict(false)
                 .names("tconst","titleType","primaryTitle","originalTitle","isAdult","startYear","endYear","runtimeMinutes","genres")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {
                     {
@@ -48,18 +50,21 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     }
 
     @Override
-    @Bean(name = "crewProcessor")
+    @Bean(name = "basicProcessor")
     public ItemProcessor<BasicMovie, BasicMovie> processor() {
         return basicMovie -> {
             if (Objects.equals(basicMovie.getEndYear(), "\\N"))
                 basicMovie.setEndYear(null);
+
+            if (!Objects.equals(basicMovie.getIsAdult(), "0") || !Objects.equals(basicMovie.getIsAdult(), "1"))
+                basicMovie.setIsAdult(Boolean.FALSE);
 
             return basicMovie;
         };
     }
 
     @Override
-    @Bean(name = "crewWriter")
+    @Bean(name = "basicWriter")
     public RepositoryItemWriter<BasicMovie> writer() {
         RepositoryItemWriter<BasicMovie> writer = new RepositoryItemWriter<>();
         writer.setRepository(basicMovieJpaRepository);
@@ -69,15 +74,21 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     }
 
     @Override
-    @Bean(name = "crewStep")
-    public Step step(ItemReader<BasicMovie> reader,
+    @Bean(name = "slaveBasicStep")
+    public Step slaveStep(ItemReader<BasicMovie> reader,
                           ItemProcessor<BasicMovie, BasicMovie> processor,
                           ItemWriter<BasicMovie> writer) {
-        return new StepBuilder("basicStep", jobRepository)
-                .<BasicMovie, BasicMovie>chunk(100, transactionManager)
+        return new StepBuilder("slaveStep", jobRepository)
+                .<BasicMovie, BasicMovie>chunk(10, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
+//                .faultTolerant()
+//                .skip(FlatFileParseException.class)
+//                .skipLimit(70)
                 .build();
     }
+
+
+    
 }

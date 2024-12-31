@@ -24,7 +24,9 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
 
     private final CrewJpaRepository crewJpaRepository;
 
-    public CrewStepConfiguration(CrewJpaRepository crewJpaRepository, JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public CrewStepConfiguration(CrewJpaRepository crewJpaRepository,
+                                 JobRepository jobRepository,
+                                 PlatformTransactionManager transactionManager) {
         super(jobRepository, transactionManager);
         this.crewJpaRepository = crewJpaRepository;
     }
@@ -37,7 +39,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
                 .name("crewItemReader")
                 .resource(new ClassPathResource("crewTest.tsv"))
                 .linesToSkip(1)
-                .delimited().delimiter("\t")
+                .delimited().delimiter("\t").strict(false)
                 .names("tconst","directors","writers")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {
                     {
@@ -74,14 +76,23 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
 
     @Override
     @Bean
-    public Step step(ItemReader<Crew> reader,
+    public Step slaveStep(ItemReader<Crew> reader,
                          ItemProcessor<Crew, Crew> processor,
                          ItemWriter<Crew> writer) {
         return new StepBuilder("crewStep", jobRepository)
-                .<Crew, Crew>chunk(100, transactionManager)
+                .<Crew, Crew>chunk(10, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
                 .build();
     }
+
+//    @Override
+//    @Bean(name = "crewPartitionHandler")
+//    public TaskExecutorPartitionHandler partitionHandler(Step slaveStep) {
+//        partitionHandler.setStep(slaveStep);
+//        partitionHandler.setTaskExecutor(new SimpleAsyncTaskExecutor());
+//        partitionHandler.setGridSize(500); // Adjust for the number of files/threads
+//        return partitionHandler;
+//    }
 }
