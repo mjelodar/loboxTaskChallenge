@@ -1,7 +1,6 @@
 package com.lobox.demo.service;
 
 import com.lobox.demo.repository.BasicMovieJpaRepository;
-import com.lobox.demo.repository.model.BasicMovie;
 import com.lobox.demo.view.BasicView;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +15,19 @@ public class BasicService {
     }
 
     public List<BasicView> findAll() {
-        return basicMovieJpaRepository.findAll().
+        return (List<BasicView>) basicMovieJpaRepository.findAll().
                 stream().
-                map(basicMovie -> new BasicView(basicMovie.getTconst(),
-                        basicMovie.getTitleType(),
-                        basicMovie.getPrimaryTitle(),
-                        basicMovie.getOriginalTitle(),
-                        basicMovie.getIsAdult(),
-                        basicMovie.getStartYear(),
-                        basicMovie.getEndYear(),
-                        basicMovie.getRunTimeMinutes(),
-                        basicMovie.getGenre()))
-                .toList();
+                map(basicMovie -> BasicView.builder()
+                                .tconst(basicMovie.getTconst())
+                                .titleType(basicMovie.getTitleType())
+                                .primaryTitle(basicMovie.getPrimaryTitle())
+                                .originalTitle(basicMovie.getOriginalTitle())
+                                .isAdult(basicMovie.getIsAdult())
+                                .startYear(basicMovie.getStartYear())
+                                .endYear(basicMovie.getEndYear())
+                                .runTimeMinutes(basicMovie.getRunTimeMinutes())
+                                .genre(basicMovie.getGenre())
+                                .build()).toList();
+
     }
 }

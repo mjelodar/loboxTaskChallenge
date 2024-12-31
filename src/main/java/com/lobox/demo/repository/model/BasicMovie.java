@@ -5,17 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+//@NamedEntityGraph(name = "basic.crew",
+//        attributeNodes = @NamedAttributeNode("crew"))
 @Table
 public class BasicMovie {
     @Id
     private String tconst;
+
+//    @OneToOne(mappedBy = "basicMovie", cascade = CascadeType.ALL)
+//    private Crew crew;
+
     private String titleType;
     private String primaryTitle;
     private String originalTitle;

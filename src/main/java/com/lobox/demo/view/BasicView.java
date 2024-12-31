@@ -1,11 +1,10 @@
 package com.lobox.demo.view;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@SuperBuilder
 public class BasicView {
     private String tconst;
     private String titleType;
