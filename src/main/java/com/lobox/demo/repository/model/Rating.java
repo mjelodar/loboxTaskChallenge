@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class Rating {
     @Id
     private String tconst;
-    private String averageRating;
-    private String numVotes;
+    private Double averageRating;
+    private Integer numVotes;
 }
