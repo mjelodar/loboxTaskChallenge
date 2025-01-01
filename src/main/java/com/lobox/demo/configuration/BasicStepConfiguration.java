@@ -1,4 +1,4 @@
-package com.lobox.demo.service;
+package com.lobox.demo.configuration;
 
 import com.lobox.demo.repository.BasicMovieJpaRepository;
 import com.lobox.demo.repository.model.BasicMovie;
@@ -32,11 +32,11 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
 
 
     @Override
-    @Bean(name = "crewReader")
+    @Bean(name = "basicReader")
     protected FlatFileItemReader<BasicMovie> reader() {
         return new FlatFileItemReaderBuilder<BasicMovie>()
                 .name("basicItemReader")
-                .resource(new ClassPathResource("test.tsv"))
+                .resource(new ClassPathResource("basicTest.tsv"))
                 .linesToSkip(1)
                 .delimited().delimiter("\t")
                 .names("tconst","titleType","primaryTitle","originalTitle","isAdult","startYear","endYear","runtimeMinutes","genres")
@@ -48,7 +48,7 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     }
 
     @Override
-    @Bean(name = "crewProcessor")
+    @Bean(name = "basicProcessor")
     public ItemProcessor<BasicMovie, BasicMovie> processor() {
         return basicMovie -> {
             if (Objects.equals(basicMovie.getEndYear(), "\\N"))
@@ -59,7 +59,7 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     }
 
     @Override
-    @Bean(name = "crewWriter")
+    @Bean(name = "basicWriter")
     public RepositoryItemWriter<BasicMovie> writer() {
         RepositoryItemWriter<BasicMovie> writer = new RepositoryItemWriter<>();
         writer.setRepository(basicMovieJpaRepository);
@@ -69,7 +69,7 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     }
 
     @Override
-    @Bean(name = "crewStep")
+    @Bean(name = "basicStep")
     public Step step(ItemReader<BasicMovie> reader,
                           ItemProcessor<BasicMovie, BasicMovie> processor,
                           ItemWriter<BasicMovie> writer) {

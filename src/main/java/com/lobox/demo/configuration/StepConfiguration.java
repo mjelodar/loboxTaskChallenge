@@ -1,4 +1,4 @@
-package com.lobox.demo.service;
+package com.lobox.demo.configuration;
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;

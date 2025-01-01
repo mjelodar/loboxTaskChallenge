@@ -1,4 +1,4 @@
-package com.lobox.demo.service;
+package com.lobox.demo.configuration;
 
 import com.lobox.demo.repository.CrewJpaRepository;
 import com.lobox.demo.repository.model.Crew;
@@ -31,7 +31,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
 
 
     @Override
-    @Bean
+    @Bean("crewReader")
     protected FlatFileItemReader<Crew> reader() {
         return new FlatFileItemReaderBuilder<Crew>()
                 .name("crewItemReader")
@@ -47,7 +47,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
     }
 
     @Override
-    @Bean
+    @Bean("crewProcessor")
     public ItemProcessor<Crew, Crew> processor() {
         return crew -> {
             if (Objects.equals(crew.getDirectors(), "\\N"))
@@ -63,7 +63,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
 
 
     @Override
-    @Bean
+    @Bean("crewWriter")
     public RepositoryItemWriter<Crew> writer() {
         RepositoryItemWriter<Crew> writer = new RepositoryItemWriter<>();
         writer.setRepository(crewJpaRepository);
@@ -73,7 +73,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
     }
 
     @Override
-    @Bean
+    @Bean("crewStep")
     public Step step(ItemReader<Crew> reader,
                          ItemProcessor<Crew, Crew> processor,
                          ItemWriter<Crew> writer) {

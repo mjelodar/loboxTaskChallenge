@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
 public class BasicMovie {
     @Id
     private String tconst;
-
-//    @OneToOne(mappedBy = "basicMovie", cascade = CascadeType.ALL)
-//    private Crew crew;
-
     private String titleType;
+
+    @Column(length = 500)
     private String primaryTitle;
+
+    @Column(length = 500)
     private String originalTitle;
     private Boolean isAdult;
     private String startYear;
@@ -30,11 +30,4 @@ public class BasicMovie {
     private String genre;
 
 
-//    private String directors;
-//    private String writers;
-//    private String averageRating;
-////    private String numVotes;
-//
-//    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "basicMovie")
-//    private List<Principals> principals;
 }

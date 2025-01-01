@@ -1,6 +1,7 @@
 package com.lobox.demo.service;
 
 import com.lobox.demo.repository.BasicMovieJpaRepository;
+import com.lobox.demo.view.BasicMoviePlusRating;
 import com.lobox.demo.view.BasicView;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,10 @@ public class BasicService {
                                 .runTimeMinutes(basicMovie.getRunTimeMinutes())
                                 .genre(basicMovie.getGenre())
                                 .build()).toList();
+    }
+
+    public List<BasicMoviePlusRating> findByGenre(String genre) {
+        return basicMovieJpaRepository.findByGenre(genre);
 
     }
 }
