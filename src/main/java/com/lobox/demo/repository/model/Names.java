@@ -1,11 +1,14 @@
 package com.lobox.demo.repository.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table
 public class Names {
@@ -15,8 +18,7 @@ public class Names {
     private String birthYear;
     private String deathYear;
     private String primaryProfession;
-    private String knownForTitles;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "names")
-    private Set<Principals> principals;
+    @Column(length = 500)
+    private String knownForTitles;
 }

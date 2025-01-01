@@ -1,21 +1,23 @@
 package com.lobox.demo.repository.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@IdClass(PrincipalPK.class)
 @Table
 public class Principals {
     @Id
     private int ordering;
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "basicMovieId", referencedColumnName = "tconst")
-    private BasicMovie basicMovie;
+    private String tconst;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nameId", referencedColumnName = "nconst")
-    private Names names;
-
+    private String nconst;
     private String category;
     private String job;
     private String characters;

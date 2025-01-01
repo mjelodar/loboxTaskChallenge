@@ -1,23 +1,40 @@
 package com.lobox.demo;
 
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.boot.CommandLineRunner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Arrays;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
+@Slf4j
 @SpringBootApplication
 public class ImdbApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ImdbApplication.class, args);
+//		readFile();
+	}
+
+	public static void readFile(){
+		try(FileReader fr = new FileReader("name.basics.tsv");
+			FileWriter fw = new FileWriter("nameTest.tsv")){
+
+			int i = 1000000;
+
+			while(i > 0){
+				fw.append((char) fr.read());
+				i--;
+			}
+
+		}catch(IOException e){
+			log.error("error in reading file : {}", e);
+		}
+
+
+
+
 	}
 
 }
