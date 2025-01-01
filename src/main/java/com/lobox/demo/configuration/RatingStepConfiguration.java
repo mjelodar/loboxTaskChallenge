@@ -41,7 +41,7 @@ public class RatingStepConfiguration extends StepConfiguration<Rating> {
     @Bean(name = "ratingMasterStep")
     public Step masterStep(JobRepository jobRepository) {
         return new StepBuilder("ratingMasterStep", jobRepository)
-                .partitioner("ratingBasicSlaveStep", new FilePartitioner(fileName, 500))
+                .partitioner("ratingBasicSlaveStep", new FilePartitioner(fileName, 50))
                 .step(slaveStep(reader(null, 0, 0), processor(), writer()))
                 .partitionHandler(partitionHandler(slaveStep(reader(null, 0, 0), processor(), writer())))
                 .build();
@@ -56,7 +56,7 @@ public class RatingStepConfiguration extends StepConfiguration<Rating> {
         return new FlatFileItemReaderBuilder<Rating>()
                 .name("basicItemReader")
                 .resource(new ClassPathResource(fileName))
-                .linesToSkip(startLine)
+                .linesToSkip(startLine== 0 ? 1:startLine)
                 .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
                     private int currentLine = startLine;
 

@@ -41,7 +41,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
     @Bean(name = "crewMasterStep")
     public Step masterStep(JobRepository jobRepository) {
         return new StepBuilder("crewMasterStep", jobRepository)
-                .partitioner("crewBasicSlaveStep", new FilePartitioner(fileName, 500))
+                .partitioner("crewBasicSlaveStep", new FilePartitioner(fileName, 50))
                 .step(slaveStep(reader(null, 0, 0), processor(), writer()))
                 .partitionHandler(partitionHandler(slaveStep(reader(null, 0, 0), processor(), writer())))
                 .build();
@@ -57,7 +57,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
         return new FlatFileItemReaderBuilder<Crew>()
                 .name("basicItemReader")
                 .resource(new ClassPathResource(fileName))
-                .linesToSkip(startLine)
+                .linesToSkip(startLine== 0 ? 1:startLine)
                 .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
                     private int currentLine = startLine;
 

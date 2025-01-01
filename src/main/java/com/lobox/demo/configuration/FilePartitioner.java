@@ -34,6 +34,9 @@ public class FilePartitioner implements Partitioner {
                 context.putInt("endLine", Math.min(start + partitionSize - 1, totalLines - 1));
                 context.putString("filePath", filePath);
                 partitions.put("partition" + partitionNumber, context);
+                System.out.println("=======>> startLine" + start);
+                System.out.println("=======>> endLine" + Math.min(start + partitionSize - 1, totalLines - 1));
+                System.out.println("=======>> partition" + partitionNumber);
                 partitionNumber++;
             }
         } catch (Exception e) {

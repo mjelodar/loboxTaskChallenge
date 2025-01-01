@@ -75,7 +75,7 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
         return new FlatFileItemReaderBuilder<BasicMovie>()
                 .name("basicItemReader")
                 .resource(new ClassPathResource(fileName))
-                .linesToSkip(startLine)
+                .linesToSkip(startLine== 0 ? 1:startLine)
                 .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy() {
                     private int currentLine = startLine;
 
@@ -97,6 +97,9 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     @Bean(name = "basicProcessor")
     public ItemProcessor<BasicMovie, BasicMovie> processor() {
         return basicMovie -> {
+            if (Objects.equals(basicMovie.getTconst(), "tconst"))
+
+
             if (Objects.equals(basicMovie.getEndYear(), "\\N"))
                 basicMovie.setEndYear(null);
 
