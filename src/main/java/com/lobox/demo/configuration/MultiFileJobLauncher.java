@@ -1,4 +1,4 @@
-package com.lobox.demo.service;
+package com.lobox.demo.configuration;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -8,9 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-
 @Configuration
-public class BatchConfig {
+public class MultiFileJobLauncher {
 
     private final JobRepository jobRepository;
     private final Step basicMovieStep;
@@ -20,7 +19,7 @@ public class BatchConfig {
 //    @Value("${title.basics.file.path}")
 //    private String filePath;
 
-    public BatchConfig(JobRepository jobRepository,
+    public MultiFileJobLauncher(JobRepository jobRepository,
                        BasicStepConfiguration basicStepConfiguration,
                        CrewStepConfiguration crewStepConfiguration,
                        RatingStepConfiguration ratingStepConfiguration) {
@@ -33,24 +32,11 @@ public class BatchConfig {
 
 
     @Bean(name = "importJob")
-    public Job importJob() {
+    public Job importJob(Step masterStep) {
         return new JobBuilder("import job", jobRepository)
-                .start(basicMovieStep)
-                .next(crewStep)
-                .next(ratingStep)
+                .start(masterStep)
                 .build();
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
