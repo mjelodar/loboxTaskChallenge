@@ -3,6 +3,7 @@ package com.lobox.demo.service;
 import com.lobox.demo.repository.BasicMovieJpaRepository;
 import com.lobox.demo.view.BasicMoviePlusRating;
 import com.lobox.demo.view.BasicView;
+import com.lobox.demo.view.BestMovieOfYears;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class BasicService {
                                 .build()).toList();
     }
 
-    public List<BasicMoviePlusRating> findByGenre(String genre) {
+    public List<BestMovieOfYears> findByGenre(String genre) {
         return basicMovieJpaRepository.findByGenre(genre);
 
     }
