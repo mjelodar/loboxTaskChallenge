@@ -3,6 +3,7 @@ package com.lobox.demo.service;
 import com.lobox.demo.repository.BasicMovieJpaRepository;
 import com.lobox.demo.view.BasicView;
 import com.lobox.demo.view.BestMovieOfYears;
+import com.lobox.demo.view.MovieWith2CommonActors;
 import com.lobox.demo.view.SameAliveDirectorWriter;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,9 @@ public class BasicService {
 
     public List<SameAliveDirectorWriter> findMovieWithAliveSameDirectorWriter() {
         return basicMovieJpaRepository.findMovieWithSameAliveDirectorWriter();
+    }
+
+    public List<MovieWith2CommonActors> findMovieWith2CommonActor(String actor1, String actor2) {
+        return basicMovieJpaRepository.findMovieWith2CommonActor(actor1, actor2);
     }
 }

@@ -2,6 +2,7 @@ package com.lobox.demo.repository;
 
 import com.lobox.demo.repository.model.BasicMovie;
 import com.lobox.demo.view.BestMovieOfYears;
+import com.lobox.demo.view.MovieWith2CommonActors;
 import com.lobox.demo.view.SameAliveDirectorWriter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,20 @@ public interface BasicMovieJpaRepository extends JpaRepository<BasicMovie, Strin
                     n.deathYear is null and n.birthYear is not null""")
     List<SameAliveDirectorWriter> findMovieWithSameAliveDirectorWriter();
 
+    @Query("""
+            select new com.lobox.demo.view.MovieWith2CommonActors(b.primaryTitle) \
+            from BasicMovie b \
+            where b.tconst in ( \
+                select p1.tconst \
+                from Principals p1 \
+                inner join Names n1  on p1.nconst=n1.nconst \
+                where (p1.job='actor' or p1.job='actress') and \
+                n1.primaryName =?1 and \
+                p1.tconst in ( \
+                    select p2.tconst \
+                    from Principals p2 \
+                    inner join Names n2 on p2.nconst=n2.nconst \
+                    where (p2.job='actor' or p2.job='actress') and \
+                    n2.primaryName =?2))""")
+    List<MovieWith2CommonActors> findMovieWith2CommonActor(String actor1, String actor2);
 }

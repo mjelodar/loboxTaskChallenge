@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,13 +19,15 @@ public class ImdbApplication {
 	}
 
 	public static void readFile(){
-		try(FileReader fr = new FileReader("name.basics.tsv");
+		try(BufferedReader br = new BufferedReader(new FileReader("name.basics.tsv"));
 			FileWriter fw = new FileWriter("nameTest.tsv")){
 
 			int i = 1000000;
 
 			while(i > 0){
-				fw.append((char) fr.read());
+				log.info("step" + i);
+				fw.write(br.readLine());
+				fw.write("\n");
 				i--;
 			}
 

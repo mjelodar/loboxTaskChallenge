@@ -10,13 +10,12 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-public class JobLauncherController {
+public class ServiceController {
     @Autowired
     private JobLauncher jobLauncher;
 
@@ -24,16 +23,19 @@ public class JobLauncherController {
     private Job job;
 
     @Autowired
-    BasicService basicService;
+    private BasicService basicService;
 
     @Autowired
-    RatingService ratingService;
+    private RatingService ratingService;
 
     @Autowired
-    CrewService crewService;
+    private CrewService crewService;
+
+    private static AtomicLong requestCounter = new AtomicLong(0);
 
     @PostMapping("/importdata")
     public void importData() throws Exception{
+        requestCounter.incrementAndGet();
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("JobID", String.valueOf(System.currentTimeMillis()))
                 .toJobParameters();
@@ -48,26 +50,44 @@ public class JobLauncherController {
 
     @GetMapping("/get/basic")
     public String getBasicMovie(){
+        requestCounter.incrementAndGet();
         return new Gson().toJson(basicService.findAll());
     }
 
-    @GetMapping("/get/bestMovie/{genre}")
-    public String getBasicMovie(@PathVariable String genre){
+    @GetMapping("/get/bestMovieOnEachYear")
+    public String getBasicMovie(@RequestParam String genre){
+        requestCounter.incrementAndGet();
         return new Gson().toJson(basicService.findBestMovieOfYearsByGenre(genre));
     }
 
     @GetMapping("/get/rating")
     public String getMovieRating(){
+        requestCounter.incrementAndGet();
         return new Gson().toJson(ratingService.findAll());
     }
 
     @GetMapping("/get/crew")
     public String getMovieCrew(){
+        requestCounter.incrementAndGet();
         return new Gson().toJson(crewService.findAll());
     }
 
     @GetMapping("/get/movie/sameAliveDirectorWriter")
-    public String getMovieThatHaveSameAliveDirectorAndWriter(){
+    public String getMovieThatHaveSameAliveDirectorAndWriter() {
+        requestCounter.incrementAndGet();
         return new Gson().toJson(basicService.findMovieWithAliveSameDirectorWriter());
+    }
+
+    @GetMapping("/get/movie/twoCommonActors")
+    public String getMovieThatHaveSameAliveDirectorAndWriter(@RequestParam String actor1, @RequestParam String actor2){
+        requestCounter.incrementAndGet();
+        return new Gson().toJson(basicService.findMovieWith2CommonActor(actor1, actor2));
+    }
+
+    @GetMapping("/get/requestCounter")
+    public String getRequestCounter(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("number of request: ").append(String.valueOf(requestCounter.get()));
+        return new Gson().toJson(sb.toString());
     }
 }
