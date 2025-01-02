@@ -39,7 +39,7 @@ public class PrincipalStepConfiguration extends StepConfiguration<Principals> {
                 .resource(new ClassPathResource("principalsTest.tsv"))
                 .linesToSkip(1)
                 .delimited().delimiter("\t")
-                .names("ordering","tconst","nconst","category","job","characters")
+                .names("tconst","ordering","nconst","category","job","characters")
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {
                     {
                         setTargetType(Principals.class);

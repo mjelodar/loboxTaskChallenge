@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Table
 public class Principals {
     @Id
-    private int ordering;
-    @Id
     private String tconst;
+    @Id
+    private int ordering;
 
     private String nconst;
     private String category;

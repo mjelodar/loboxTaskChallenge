@@ -1,9 +1,9 @@
 package com.lobox.demo.service;
 
 import com.lobox.demo.repository.BasicMovieJpaRepository;
-import com.lobox.demo.view.BasicMoviePlusRating;
 import com.lobox.demo.view.BasicView;
 import com.lobox.demo.view.BestMovieOfYears;
+import com.lobox.demo.view.SameAliveDirectorWriter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +32,11 @@ public class BasicService {
                                 .build()).toList();
     }
 
-    public List<BestMovieOfYears> findByGenre(String genre) {
-        return basicMovieJpaRepository.findByGenre(genre);
+    public List<BestMovieOfYears> findBestMovieOfYearsByGenre(String genre) {
+        return basicMovieJpaRepository.findBestMovieOfYearsByGenre(genre);
+    }
 
+    public List<SameAliveDirectorWriter> findMovieWithAliveSameDirectorWriter() {
+        return basicMovieJpaRepository.findMovieWithSameAliveDirectorWriter();
     }
 }

@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class PrincipalPK {
-    private int ordering;
     private String tconst;
+    private int ordering;
 }

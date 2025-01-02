@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.lobox.demo.service.BasicService;
 import com.lobox.demo.service.CrewService;
 import com.lobox.demo.service.RatingService;
-import com.lobox.demo.view.BasicView;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class JobLauncherController {
@@ -54,9 +51,9 @@ public class JobLauncherController {
         return new Gson().toJson(basicService.findAll());
     }
 
-    @GetMapping("/get/basic/{genre}")
+    @GetMapping("/get/bestMovie/{genre}")
     public String getBasicMovie(@PathVariable String genre){
-        return new Gson().toJson(basicService.findByGenre(genre));
+        return new Gson().toJson(basicService.findBestMovieOfYearsByGenre(genre));
     }
 
     @GetMapping("/get/rating")
@@ -67,5 +64,10 @@ public class JobLauncherController {
     @GetMapping("/get/crew")
     public String getMovieCrew(){
         return new Gson().toJson(crewService.findAll());
+    }
+
+    @GetMapping("/get/movie/sameAliveDirectorWriter")
+    public String getMovieThatHaveSameAliveDirectorAndWriter(){
+        return new Gson().toJson(basicService.findMovieWithAliveSameDirectorWriter());
     }
 }

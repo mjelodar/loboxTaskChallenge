@@ -16,6 +16,8 @@ public class BatchConfig {
     private final Step basicMovieStep;
     private final Step crewStep;
     private final Step ratingStep;
+    private final Step pricipalStep;
+    private final Step namesStep;
 
 //    @Value("${title.basics.file.path}")
 //    private String filePath;
@@ -23,12 +25,16 @@ public class BatchConfig {
     public BatchConfig(JobRepository jobRepository,
                        BasicStepConfiguration basicStepConfiguration,
                        CrewStepConfiguration crewStepConfiguration,
-                       RatingStepConfiguration ratingStepConfiguration) {
+                       RatingStepConfiguration ratingStepConfiguration,
+                       PrincipalStepConfiguration principalStepConfiguration,
+                       NamesStepConfiguration namesStepConfiguration) {
         this.jobRepository = jobRepository;
 
         this.basicMovieStep = basicStepConfiguration.createStep();
         this.crewStep = crewStepConfiguration.createStep();
         this.ratingStep = ratingStepConfiguration.createStep();
+        this.pricipalStep = principalStepConfiguration.createStep();
+        this.namesStep = namesStepConfiguration.createStep();
     }
 
 
@@ -38,6 +44,8 @@ public class BatchConfig {
                 .start(basicMovieStep)
                 .next(crewStep)
                 .next(ratingStep)
+                .next(pricipalStep)
+                .next(namesStep)
                 .build();
     }
 
