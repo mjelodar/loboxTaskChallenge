@@ -12,9 +12,11 @@ import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Objects;
@@ -23,6 +25,9 @@ import java.util.Objects;
 public class CrewStepConfiguration extends StepConfiguration<Crew> {
 
     private final CrewJpaRepository crewJpaRepository;
+
+    @Value("${title.crew.file.path}")
+    private String filePath;
 
     public CrewStepConfiguration(CrewJpaRepository crewJpaRepository, JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         super(jobRepository, transactionManager);
@@ -35,7 +40,7 @@ public class CrewStepConfiguration extends StepConfiguration<Crew> {
     protected FlatFileItemReader<Crew> reader() {
         return new FlatFileItemReaderBuilder<Crew>()
                 .name("crewItemReader")
-                .resource(new ClassPathResource("crewTest.tsv"))
+                .resource(new FileSystemResource(filePath))
                 .linesToSkip(1)
                 .delimited().delimiter("\t")
                 .names("tconst","directors","writers")

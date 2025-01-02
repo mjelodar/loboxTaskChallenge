@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface BasicMovieJpaRepository extends JpaRepository<BasicMovie, String> {
     @Query("""
-            select new com.lobox.demo.view.BestMovieOfYears(b.primaryTitle, b.startYear, b.genre, r.averageRating*r.numVotes) \
+            select new com.lobox.demo.view.BestMovieOfYears(b.primaryTitle, b.startYear, b.genre, r.averageRating, r.numVotes) \
             from BasicMovie b \
             inner join Rating r ON b.tconst = r.tconst \
             where (b.startYear, b.genre, (r.averageRating * r.numVotes)) in (\
@@ -32,6 +32,7 @@ public interface BasicMovieJpaRepository extends JpaRepository<BasicMovie, Strin
             inner join Principals p ON c.tconst = p.tconst \
             inner join Names n ON p.nconst = n.nconst \
             where c.directors=c.writers and \
+                    p.category = 'director' and \
                     n.deathYear is null and n.birthYear is not null""")
     List<SameAliveDirectorWriter> findMovieWithSameAliveDirectorWriter();
 
@@ -42,13 +43,13 @@ public interface BasicMovieJpaRepository extends JpaRepository<BasicMovie, Strin
                 select p1.tconst \
                 from Principals p1 \
                 inner join Names n1  on p1.nconst=n1.nconst \
-                where (p1.job='actor' or p1.job='actress') and \
+                where (p1.category='actor' or p1.category='actress') and \
                 n1.primaryName =?1 and \
                 p1.tconst in ( \
                     select p2.tconst \
                     from Principals p2 \
                     inner join Names n2 on p2.nconst=n2.nconst \
-                    where (p2.job='actor' or p2.job='actress') and \
+                    where (p2.category='actor' or p2.category='actress') and \
                     n2.primaryName =?2))""")
     List<MovieWith2CommonActors> findMovieWith2CommonActor(String actor1, String actor2);
 }

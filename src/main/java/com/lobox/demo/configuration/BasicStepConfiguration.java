@@ -12,9 +12,11 @@ import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Objects;
@@ -24,6 +26,8 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
 
     private final BasicMovieJpaRepository basicMovieJpaRepository;
 
+    @Value("${title.basics.file.path}")
+    private String filePath;
 
     public BasicStepConfiguration(BasicMovieJpaRepository basicMovieJpaRepository, JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         super(jobRepository, transactionManager);
@@ -36,7 +40,7 @@ public class BasicStepConfiguration extends StepConfiguration<BasicMovie> {
     protected FlatFileItemReader<BasicMovie> reader() {
         return new FlatFileItemReaderBuilder<BasicMovie>()
                 .name("basicItemReader")
-                .resource(new ClassPathResource("basicTest.tsv"))
+                .resource(new FileSystemResource(filePath))
                 .linesToSkip(1)
                 .delimited().delimiter("\t")
                 .names("tconst","titleType","primaryTitle","originalTitle","isAdult","startYear","endYear","runtimeMinutes","genres")

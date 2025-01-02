@@ -12,9 +12,11 @@ import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Objects;
@@ -24,6 +26,8 @@ public class PrincipalStepConfiguration extends StepConfiguration<Principals> {
 
     private final PrincipalJpaRepository principalJpaRepository;
 
+    @Value("${title.principal.file.path}")
+    private String filePath;
 
     public PrincipalStepConfiguration(JobRepository jobRepository, PlatformTransactionManager transactionManager, PrincipalJpaRepository principalJpaRepository) {
         super(jobRepository, transactionManager);
@@ -36,7 +40,7 @@ public class PrincipalStepConfiguration extends StepConfiguration<Principals> {
     protected FlatFileItemReader<Principals> reader() {
         return new FlatFileItemReaderBuilder<Principals>()
                 .name("principalItemReader")
-                .resource(new ClassPathResource("principalsTest.tsv"))
+                .resource(new FileSystemResource(filePath))
                 .linesToSkip(1)
                 .delimited().delimiter("\t")
                 .names("tconst","ordering","nconst","category","job","characters")
